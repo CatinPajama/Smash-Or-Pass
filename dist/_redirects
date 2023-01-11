@@ -1,0 +1,5 @@
+
+  /pokemon    /.netlify/functions/entry    200
+  /results    /.netlify/functions/entry    200
+  /api/result    /.netlify/functions/entry    200
+  /api/id/*    /.netlify/functions/entry    200
