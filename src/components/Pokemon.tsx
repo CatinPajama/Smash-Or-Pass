@@ -35,7 +35,7 @@ export default function Pokemon() {
         <div>
             <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} />
             <button onClick={vote} disabled={disabled}>Smash</button>
-            <button onClick={() => { onclick }}>Pass</button>
+            <button onClick={() => { setDisabled(false); setId(Math.ceil(Math.random() * 10)) }} disabled={disabled}>Pass</button>
         </div>
 
     )
