@@ -2,9 +2,30 @@
 import Pokemon from "../components/Pokemon"
 ---
 
-
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+</head>
 <body>
-    <main>
-        <Pokemon client:load/>
-    </main>
+  <Pokemon client:load/>
 </body>
+
+<style>
+html {
+  height : 100%;
+}
+
+body, main {
+  min-height: 100%;
+}
+
+body {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  color : white;
+  font-weight: bold;
+  font-family: "RobotoMono Nerd Font"
+}
+
+</style>
