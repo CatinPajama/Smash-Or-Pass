@@ -14,3 +14,43 @@ button {
   font-size: 2.5rem;
   text-align: center;
 }
+
+@keyframes swipe-left {
+  from {
+    rotate:0deg;
+    opacity: 100%;
+    transform: translateX(0rem);
+  }
+  to {
+    rotate : -10deg;
+    opacity: 0%;
+    transform: translateX(-5rem);
+  }
+}
+
+@keyframes swipe-right {
+  from {
+    rotate:0deg;
+    opacity: 100%;
+    transform: translateX(0rem);
+  }
+  to {
+    rotate : 10deg;
+    opacity: 0%;
+    transform: translateX(5rem);
+  }
+}
+
+
+img[data-stage="swipe-left"] {
+  animation-name: swipe-left;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+
+img[data-stage="swipe-right"] {
+  animation-name: swipe-right;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
