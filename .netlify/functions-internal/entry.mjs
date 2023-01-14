@@ -1,8 +1,8 @@
 import * as adapter from '@astrojs/netlify/netlify-functions.js';
-import React, { createElement, useState, useCallback } from 'react';
+import React, { createElement, useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom/server';
 import { escape } from 'html-escaper';
-import { jsxs, jsx } from 'react/jsx-runtime';
+/* empty css                                   *//* empty css                                   */import { jsxs, jsx } from 'react/jsx-runtime';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 import { PrismaClient } from '@prisma/client';
 import 'mime';
@@ -1812,6 +1812,7 @@ function createRenderHead(result) {
   result._metadata.hasRenderedHead = true;
   return renderAllHeadContent.bind(null, result);
 }
+const renderHead = createRenderHead;
 async function* maybeRenderHead(result) {
   if (result._metadata.hasRenderedHead) {
     return;
@@ -1959,7 +1960,14 @@ var server_default = {
 function Pokemon() {
   const [disabled, setDisabled] = useState(false);
   const [id, setId] = useState(Math.ceil(Math.random() * 10));
+  console.log("rendered");
+  useEffect(() => {
+    return () => {
+      document.getElementById("pokeimg").dataset.stage = "rest";
+    };
+  }, [id]);
   const vote = useCallback(async () => {
+    document.getElementById("pokeimg").dataset.stage = "swipe-left";
     setDisabled((disabled2) => true);
     fetch(`/api/id/${id}`, {
       method: "PUT"
@@ -1968,18 +1976,40 @@ function Pokemon() {
       setId(Math.ceil(Math.random() * 10));
     });
   }, [id]);
+  const reject = () => {
+    document.getElementById("pokeimg").dataset.stage = "swipe-right";
+    setTimeout(() => {
+      setDisabled(false);
+      setId(Math.ceil(Math.random() * 10));
+    }, 1e3);
+  };
   return /* @__PURE__ */ jsxs("div", {
-    children: [/* @__PURE__ */ jsx("img", {
-      src: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
-    }), /* @__PURE__ */ jsx("button", {
-      onClick: vote,
-      disabled,
-      children: "Smash"
-    }), /* @__PURE__ */ jsx("button", {
-      onClick: () => {
-        onclick;
-      },
-      children: "Pass"
+    children: [/* @__PURE__ */ jsx("div", {
+      className: "flex content-center col-span-2",
+      children: /* @__PURE__ */ jsx("img", {
+        src: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
+        id: "pokeimg",
+        "data-stage": "rest"
+      })
+    }), /* @__PURE__ */ jsxs("div", {
+      className: "flex content-center gap-16",
+      children: [/* @__PURE__ */ jsx("div", {
+        className: "flex",
+        children: /* @__PURE__ */ jsx("button", {
+          onClick: vote,
+          disabled,
+          className: "bg-[#FFC8DD] rounded-full hover:bg-[#FFAFCC] content-center",
+          children: "\uF7D0"
+        })
+      }), /* @__PURE__ */ jsx("div", {
+        className: "flex",
+        children: /* @__PURE__ */ jsx("button", {
+          onClick: reject,
+          disabled,
+          className: "rounded-full bg-[#BDE0FE] hover:bg-[#A2D2FF] content-center",
+          children: "\uEA76"
+        })
+      })]
     })]
   });
 }
@@ -1989,10 +2019,12 @@ const $$Astro$1 = createAstro("/home/gaurab/projects/learnin/src/pages/pokemon.a
 const $$Pokemon = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
   Astro2.self = $$Pokemon;
-  return renderTemplate`${maybeRenderHead($$result)}<body>
-    <main>
-        ${renderComponent($$result, "Pokemon", Pokemon, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/gaurab/projects/learnin/src/components/Pokemon", "client:component-export": "default" })}
-    </main>
+  return renderTemplate`<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+${renderHead($$result)}</head>
+<body class="astro-Y5GP3YIH">
+  ${renderComponent($$result, "Pokemon", Pokemon, { "client:load": true, "client:component-hydration": "load", "client:component-path": "/home/gaurab/projects/learnin/src/components/Pokemon", "client:component-export": "default", "class": "astro-Y5GP3YIH" })}
+
 </body>`;
 }, "/home/gaurab/projects/learnin/src/pages/pokemon.astro");
 
@@ -2169,7 +2201,7 @@ function deserializeManifest(serializedManifest) {
   };
 }
 
-const _manifest = Object.assign(deserializeManifest({"adapterName":"@astrojs/netlify/functions","routes":[{"file":"","links":[],"scripts":[],"routeData":{"route":"/pokemon","type":"page","pattern":"^\\/pokemon\\/?$","segments":[[{"content":"pokemon","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/pokemon.astro","pathname":"/pokemon","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":[],"scripts":[],"routeData":{"route":"/results","type":"page","pattern":"^\\/results\\/?$","segments":[[{"content":"results","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/results.astro","pathname":"/results","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":[],"scripts":[],"routeData":{"route":"/api/result","type":"endpoint","pattern":"^\\/api\\/result$","segments":[[{"content":"api","dynamic":false,"spread":false}],[{"content":"result","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/api/result.ts","pathname":"/api/result","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":[],"scripts":[],"routeData":{"route":"/api/id/[id]","type":"endpoint","pattern":"^\\/api\\/id\\/([^/]+?)$","segments":[[{"content":"api","dynamic":false,"spread":false}],[{"content":"id","dynamic":false,"spread":false}],[{"content":"id","dynamic":true,"spread":false}]],"params":["id"],"component":"src/pages/api/id/[id].ts","_meta":{"trailingSlash":"ignore"}}}],"base":"/","markdown":{"drafts":false,"syntaxHighlight":"shiki","shikiConfig":{"langs":[],"theme":"github-dark","wrap":false},"remarkPlugins":[],"rehypePlugins":[],"remarkRehype":{},"extendDefaultPlugins":false,"isAstroFlavoredMd":false,"isExperimentalContentCollections":false,"contentDir":"file:///home/gaurab/projects/learnin/src/content/"},"pageMap":null,"renderers":[],"entryModules":{"\u0000@astrojs-ssr-virtual-entry":"entry.mjs","/home/gaurab/projects/learnin/src/components/Pokemon":"Pokemon.5d94334b.js","/home/gaurab/projects/learnin/src/components/PokeResult":"PokeResult.51c644ea.js","@astrojs/react/client.js":"client.374f7b42.js","astro:scripts/before-hydration.js":""},"assets":["/PokeResult.51c644ea.js","/Pokemon.5d94334b.js","/client.374f7b42.js","/robots.txt","/chunks/index.165d2645.js","/chunks/index.89543288.js","/chunks/jsx-runtime.53f2ba91.js"]}), {
+const _manifest = Object.assign(deserializeManifest({"adapterName":"@astrojs/netlify/functions","routes":[{"file":"","links":["assets/pokemon.db9d1ba6.css","assets/pokemon.b71f5378.css"],"scripts":[],"routeData":{"route":"/pokemon","type":"page","pattern":"^\\/pokemon\\/?$","segments":[[{"content":"pokemon","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/pokemon.astro","pathname":"/pokemon","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":["assets/pokemon.db9d1ba6.css"],"scripts":[],"routeData":{"route":"/results","type":"page","pattern":"^\\/results\\/?$","segments":[[{"content":"results","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/results.astro","pathname":"/results","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":[],"scripts":[],"routeData":{"route":"/api/result","type":"endpoint","pattern":"^\\/api\\/result$","segments":[[{"content":"api","dynamic":false,"spread":false}],[{"content":"result","dynamic":false,"spread":false}]],"params":[],"component":"src/pages/api/result.ts","pathname":"/api/result","_meta":{"trailingSlash":"ignore"}}},{"file":"","links":[],"scripts":[],"routeData":{"route":"/api/id/[id]","type":"endpoint","pattern":"^\\/api\\/id\\/([^/]+?)$","segments":[[{"content":"api","dynamic":false,"spread":false}],[{"content":"id","dynamic":false,"spread":false}],[{"content":"id","dynamic":true,"spread":false}]],"params":["id"],"component":"src/pages/api/id/[id].ts","_meta":{"trailingSlash":"ignore"}}}],"base":"/","markdown":{"drafts":false,"syntaxHighlight":"shiki","shikiConfig":{"langs":[],"theme":"github-dark","wrap":false},"remarkPlugins":[],"rehypePlugins":[],"remarkRehype":{},"extendDefaultPlugins":false,"isAstroFlavoredMd":false,"isExperimentalContentCollections":false,"contentDir":"file:///home/gaurab/projects/learnin/src/content/"},"pageMap":null,"renderers":[],"entryModules":{"\u0000@astrojs-ssr-virtual-entry":"entry.mjs","/home/gaurab/projects/learnin/src/components/Pokemon":"Pokemon.d0366183.js","/home/gaurab/projects/learnin/src/components/PokeResult":"PokeResult.51c644ea.js","@astrojs/react/client.js":"client.374f7b42.js","astro:scripts/before-hydration.js":""},"assets":["/assets/pokemon.b71f5378.css","/assets/pokemon.db9d1ba6.css","/PokeResult.51c644ea.js","/Pokemon.d0366183.js","/client.374f7b42.js","/robots.txt","/chunks/index.165d2645.js","/chunks/index.89543288.js","/chunks/jsx-runtime.53f2ba91.js"]}), {
 	pageMap: pageMap,
 	renderers: renderers
 });
